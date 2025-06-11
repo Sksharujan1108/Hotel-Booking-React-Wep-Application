@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from "react";
 import { icons } from "../../utils";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useClerk, useUser, UserButton } from "@clerk/clerk-react";
@@ -40,13 +41,20 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (location?.pathname !== "/") {
+      setIsScrolled(true);
+    } else {
+      setIsScrolled(false);
+    }
+    setIsScrolled(prev => location.pathname !== "/" ? true : prev);
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10 > 10);
+      setIsScrolled(window.scrollY > 10);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [location?.pathname]);
 
   return (
     <nav
